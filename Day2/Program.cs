@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace AssignmentNo3
 {
-    public abstract class Employee
+    public interface IDbFunction
+    {
+        void insert();
+        void select();
+        void update();
+        void delete();
+    }
+    public abstract class Employee : IDbFunction
     {
         static int count;
         string name;
@@ -56,27 +63,48 @@ namespace AssignmentNo3
 
         public abstract decimal Basic { get; set; }
         #endregion
+
         public Employee()
         {
             Console.WriteLine("Employee class no Param Constructor");
         }
-        public Employee(string name, short depno) : this()
+        public Employee(string name, short depno, decimal basic) : this()
         {
             Console.WriteLine("Employee class Param Constructor");
             this.EmpNo = ++count;
             this.Name = name;
             this.DeptNo = depno;
+            this.Basic = basic;
         }
 
-
+        public abstract void select();
+        public abstract void update();
+        public abstract void delete();
+        public abstract void insert();
         public abstract decimal CalNetSalary();
     }
     public class Manager : Employee
     {
-        public Manager(decimal basic) : base("Jack", 2)
+        string designation;
+        public Manager(string name = "JAMES", short depno = 11, decimal basic = 10000, string designation = "HR") : base(name, depno, basic)
         {
             Console.WriteLine("Manager NoParam Constructor");
-            this.Basic = basic;
+            this.Designation = designation;
+        }
+        public string Designation
+        {
+            get { return this.Designation; }
+            set
+            {
+                if (value != "")
+                {
+                    this.designation = value;
+                }
+                else
+                {
+                    Console.WriteLine("Designation cant be null");
+                }
+            }
         }
         public override decimal Basic
         {
@@ -101,13 +129,34 @@ namespace AssignmentNo3
         {
             return this.Basic * 0.05m + 4520;
         }
+
+        public override void select()
+        {
+            Console.WriteLine("Manager Select Query");
+        }
+
+        public override void update()
+        {
+            Console.WriteLine("Manager update Query");
+        }
+
+        public override void delete()
+        {
+            Console.WriteLine("Manager delete Query");
+        }
+
+        public override void insert()
+        {
+            Console.WriteLine("Manager Insert Query");
+        }
     }
     public class GeneralManager : Employee
     {
-        public GeneralManager(decimal basic) : base("tommy", 1)
+        public string Perk { get; set; }
+        public GeneralManager(string name, short depno, decimal basic, string perk = "none") : base(name, depno, basic)
         {
-            Console.WriteLine("General-Manager NoParam Constructor");
-            this.Basic = basic;
+            Console.WriteLine("GeneralManager NoParam Constructor");
+            this.Perk = perk;
         }
         public override decimal Basic
         {
@@ -133,13 +182,32 @@ namespace AssignmentNo3
         {
             return this.Basic * 0.05m + 10520;
         }
+
+        public override void select()
+        {
+            Console.WriteLine("GeneralManager select Query");
+        }
+
+        public override void update()
+        {
+            Console.WriteLine("GeneralManager update Query");
+        }
+
+        public override void delete()
+        {
+            Console.WriteLine("GeneralManager delete Query");
+        }
+
+        public override void insert()
+        {
+            Console.WriteLine("GeneralManager insert Query");
+        }
     }
     public class CEO : Employee
     {
-        public CEO(decimal basic) : base("Dreak", 2)
+        public CEO(string name, short depno, decimal basic) : base(name, depno, basic)
         {
-            Console.WriteLine("CEO NoParam Constructor");
-            this.Basic = basic;
+            Console.WriteLine("Manager NoParam Constructor");
         }
         public override decimal Basic
         {
@@ -165,19 +233,38 @@ namespace AssignmentNo3
         {
             return this.Basic * 0.05m + 10520;
         }
+
+        public override void delete()
+        {
+            Console.WriteLine("CEO delete Query");
+        }
+
+        public override void insert()
+        {
+            Console.WriteLine("CEO insert Query");
+        }
+
+        public override void select()
+        {
+            Console.WriteLine("CEO select Query");
+        }
+
+        public override void update()
+        {
+            Console.WriteLine("CEO update Query");
+        }
     }
     public class Program
     {
         public static void Main()
         {
-            Employee e1 = new Manager(12000);
-            Employee e2 = new GeneralManager(25000);
-            Employee e3 = new CEO(450000);
+            Employee e1 = new Manager("jack", 2, 8000);
+            e1.insert();
+
             Console.WriteLine(e1.CalNetSalary());
-            Console.WriteLine(e2.CalNetSalary());
-            Console.WriteLine(e3.CalNetSalary());
-            Console.WriteLine("General Manager : ID : " + e2.EmpNo + " Basic : " + e2.Basic + " Salary "
-                + e2.CalNetSalary() + " Dept no " + e2.DeptNo);
+
+            Console.WriteLine("General Manager : ID : " + e1.EmpNo + " Basic : " + e1.Basic + " Salary "
+                + e1.CalNetSalary() + " Dept no " + e1.DeptNo);
 
         }
     }
